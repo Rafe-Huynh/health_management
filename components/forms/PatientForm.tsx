@@ -13,7 +13,7 @@ import SubmitButton from "../SubmitButton"
 import { useState } from "react"
 import { UserFormValidation } from "@/lib/validation"
 import { useRouter } from "next/navigation"
-
+import  {createUser}  from "@/lib/actions/patient.actions"
 const PatientForm = () => {
     const router = useRouter()
     const [isLoading, setisLoading] = useState(false)
@@ -27,7 +27,7 @@ const PatientForm = () => {
       })
      
       // 2. Define a submit handler.
-      function onSubmit({name,email,phone}: z.infer<typeof UserFormValidation>) {
+      async function onSubmit({name,email,phone}: z.infer<typeof UserFormValidation>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         setisLoading(true)
@@ -38,11 +38,12 @@ const PatientForm = () => {
                 email,
                 phone
             }
-
+            const user = await createUser(userData)
+            if(user) router.push(`/patients/${user.$id}/register`)
         } catch (error) {
             console.log(error)
         }
-       
+       setisLoading(false)
       }
     
   return (
