@@ -8,6 +8,7 @@ import {
     FormLabel,
     FormMessage,
   } from "@/components/ui/form"
+import { E164Number } from "libphonenumber-js/core";
 import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import {Control} from "react-hook-form"
@@ -74,7 +75,7 @@ const RenderField = ({field, props} : {field:any ; props:CustomProps}) => {
                     placeholder = {placeholder}
                     international
                     withCountryCallingCode
-                    value={field.value as E154Number | undefined}
+                    value={field.value as E164Number | undefined}
                     onChange={field.onChange}
                     className='input-phone'
                     />
