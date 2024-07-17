@@ -14,11 +14,9 @@ import SubmitButton from "../SubmitButton"
 import { useState } from "react"
 import {getAppointmentSchema } from "@/lib/validation"
 import { useRouter } from "next/navigation"
-import  {createUser}  from "@/lib/actions/patient.actions"
-import { Doctors } from "@/constants"
-import { SelectItem } from "@radix-ui/react-select"
-import { stat } from "fs"
 import { createAppointment } from "@/lib/actions/appointment.actions"
+import { SelectItem } from "@radix-ui/react-select"
+import { Doctors } from "@/constants"
 const AppointmentForm = ({userId, patientId, type} : {
     userId: string,
     patientId: string,
@@ -55,12 +53,13 @@ const AppointmentForm = ({userId, patientId, type} : {
                 status = 'pending'
                 break
         }
+        console.log('type', type)
         try {
             if (type === 'create' && patientId){
                 const appointmentData = {
+                    primaryPhysician: values.primaryPhysician,
                     userId,
                     patient: patientId,
-                    primaryPhysician: values.primaryPhysician,
                     schedule: new Date(values.schedule),
                     reason: values.reason!,
                     note: values.note,
@@ -68,8 +67,9 @@ const AppointmentForm = ({userId, patientId, type} : {
                 }
                 const appointment = await createAppointment(appointmentData)
                 if(appointment){
+                    console.log("im here too")
                     form.reset()
-                    router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.id}`)
+                    router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`)
                 }
             }
            
@@ -105,22 +105,27 @@ const AppointmentForm = ({userId, patientId, type} : {
             type !== "cancel" && (
                 <>
                 <CustomForm
-          fieldType={FormFieldType.SELECT}
-          control={form.control}
-          name="primaryPhysician"
-          label="Doctors"
-          placeholder="Select your doctor">
-          {Doctors.map((item) => (
-            <SelectItem key={item.name} value={item.name}>
-              <div className="flex cursor-pointer gap-2">
-                <Image
-                  src={item.image} width={32} height={32} alt="doctor" className="rounded-full border border-dark-500" />
-                <p>{item.name}</p>
-              </div>
-            </SelectItem>
-          ))}
-
-        </CustomForm>
+              fieldType={FormFieldType.SELECT}
+              control={form.control}
+              name="primaryPhysician"
+              label="Doctor"
+              placeholder="Select a doctor"
+            >
+              {Doctors.map((doctor, i) => (
+                <SelectItem key={doctor.name + i} value={doctor.name}>
+                  <div className="flex cursor-pointer items-center gap-2">
+                    <Image
+                      src={doctor.image}
+                      width={32}
+                      height={32}
+                      alt="doctor"
+                      className="rounded-full border border-dark-500"
+                    />
+                    <p>{doctor.name}</p>
+                  </div>
+                </SelectItem>
+              ))}
+            </CustomForm>
         <CustomForm 
         fieldType={FormFieldType.DATE_PICKER}
         control = {form.control}
