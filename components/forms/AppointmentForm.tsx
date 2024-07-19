@@ -14,13 +14,17 @@ import SubmitButton from "../SubmitButton"
 import { useState } from "react"
 import {getAppointmentSchema } from "@/lib/validation"
 import { useRouter } from "next/navigation"
-import { createAppointment } from "@/lib/actions/appointment.actions"
+import { createAppointment, updateAppointment } from "@/lib/actions/appointment.actions"
 import { SelectItem } from "@radix-ui/react-select"
 import { Doctors } from "@/constants"
-const AppointmentForm = ({userId, patientId, type} : {
+import { Appointment } from "@/types/appwrite.types"
+import { scheduler } from "timers/promises"
+const AppointmentForm = ({userId, patientId, type, appointment, setOpen} : {
     userId: string,
     patientId: string,
-    type: "create" | "cancel" | "schedule"
+    type: "create" | "cancel" | "schedule",
+    appointment: Appointment,
+    setOpen: (open:Boolean) => void
 }) => {
     const AppointmentFormValidation = getAppointmentSchema(type)
     const router = useRouter()
@@ -71,6 +75,23 @@ const AppointmentForm = ({userId, patientId, type} : {
                     form.reset()
                     router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`)
                 }
+            } else {
+              const appointmentToUpdate  = {
+                userId,
+                appointmentId: appointment?.$id!,
+                appointment: {
+                  primaryPhysician: values?.primaryPhysician,
+                  schedule: new Date(values?.schedule),
+                  status: status as Status,
+                  cancellationReason: values?.cancellationReason
+                },
+                type
+              }
+              const updatedAppointment = await updateAppointment(appointmentToUpdate)
+              if(updatedAppointment) {
+                setOpen && setOpen(false)
+                form.reset()
+              }
             }
            
         } catch (error) {
@@ -93,7 +114,7 @@ const AppointmentForm = ({userId, patientId, type} : {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <section className="mb-12 space-y-4">
+       {type === 'create' && <section className="mb-12 space-y-4">
             <h1 className="header">
                 Welcome to Health Management
             </h1>
@@ -101,6 +122,7 @@ const AppointmentForm = ({userId, patientId, type} : {
                 Schedule your doctor appointment
             </p>
         </section>
+        }
         {
             type !== "cancel" && (
                 <>
