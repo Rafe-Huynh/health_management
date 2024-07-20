@@ -3,7 +3,7 @@ import { MoreHorizontal } from "lucide-react"
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 
-import StatusBadge from "../StatusBadge"
+import {StatusBadge} from "../StatusBadge"
 import { formatDateTime } from "@/lib/utils"
 import { Appointment } from "@/types/appwrite.types"
 import { Doctors } from "@/constants"
@@ -28,19 +28,22 @@ export const columns: ColumnDef<Appointment>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({row}) => {
+      return (
         <div className="min-w-[115px]">
             <StatusBadge status = {row.original.status}/>
         </div>
+      )
     }
   },
   {
     accessorKey: "schedule",
     header: "Appointment",
     cell: ({row}) => {
+      return (
         <p className="text-14-regular min-w-[100px]">
             {formatDateTime(row.original.schedule).dateTime}
-
         </p>
+      )
     }
   },
   {
@@ -50,8 +53,8 @@ export const columns: ColumnDef<Appointment>[] = [
         const doctor = Doctors.find((doc) => doc.name === row.original.primaryPhysician)
     return (
        <div className="flex items-center gap-3">
-        <Image src={doctor?.image}
-        alt={doctor?.name}
+        <Image src={doctor?.image!}
+        alt={doctor?.name!}
         width={100}
         height={100}
         className="size-8"
@@ -69,15 +72,19 @@ export const columns: ColumnDef<Appointment>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex gap-1">
-            <AppointmentModal type='schedule' patientId={row.original.patient.$id}
-            userId={row.original.userId}
-            appointment={row.original}
-           
-            />
-            <AppointmentModal type='cancel'
+            <AppointmentModal 
+            type='schedule' 
             patientId={row.original.patient.$id}
             userId={row.original.userId}
             appointment={row.original}
+            
+            />
+            <AppointmentModal 
+            type='cancel'
+            patientId={row.original.patient.$id}
+            userId={row.original.userId}
+            appointment={row.original}
+          
             />
         </div>
       )

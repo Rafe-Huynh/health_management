@@ -30,13 +30,13 @@ const AppointmentModal = ({type, patientId, userId, appointment}: {type: 'schedu
                         Fill in the following to {type} an appointment
                     </DialogDescription>
                 </DialogHeader>
-                {/* <AppointmentForm 
+                <AppointmentForm 
                     userId={userId}
                     patientId={patientId}
                     type={type}
-                    // appointment ={appointment}
-
-                /> */}
+                    appointment ={appointment}
+                    setOpen = {setOpen}
+                />
             </DialogContent>
         </Dialog>
 

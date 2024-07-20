@@ -11,7 +11,7 @@ import { Button } from "../ui/button"
 import Image from "next/image"
 import CustomForm, { FormFieldType } from "../CustomForm"
 import SubmitButton from "../SubmitButton"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import {getAppointmentSchema } from "@/lib/validation"
 import { useRouter } from "next/navigation"
 import { createAppointment, updateAppointment } from "@/lib/actions/appointment.actions"
@@ -19,12 +19,12 @@ import { SelectItem } from "@radix-ui/react-select"
 import { Doctors } from "@/constants"
 import { Appointment } from "@/types/appwrite.types"
 import { scheduler } from "timers/promises"
-const AppointmentForm = ({userId, patientId, type, appointment, setOpen} : {
+const AppointmentForm = ({userId, patientId, type = "create", appointment, setOpen} : {
     userId: string,
     patientId: string,
     type: "create" | "cancel" | "schedule",
-    appointment: Appointment,
-    setOpen: (open:Boolean) => void
+    appointment?: Appointment,
+    setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
     const AppointmentFormValidation = getAppointmentSchema(type)
     const router = useRouter()
@@ -32,11 +32,13 @@ const AppointmentForm = ({userId, patientId, type, appointment, setOpen} : {
     const form = useForm<z.infer<typeof AppointmentFormValidation>>({
         resolver: zodResolver(AppointmentFormValidation),
         defaultValues: {
-          primaryPhysician: "",
-          schedule: new Date(),
-          reason: "",
-          note: "",
-          cancellationReason: "",
+          primaryPhysician: appointment ? appointment?.primaryPhysician : "",
+          schedule: appointment
+          ? new Date(appointment?.schedule!)
+          : new Date(Date.now()),
+          reason: appointment ? appointment.reason : "",
+          note: appointment ? appointment.reason : "",
+          cancellationReason: appointment?.cancellationReason || "",
         },
       })
      
