@@ -1,9 +1,10 @@
-import AppointmentForm from "@/components/forms/AppointmentForm";
-import { getPatient } from "@/lib/actions/patient.actions";
+import {AppointmentForm} from "@/components/forms/AppointmentForm";
+import { getPatient, getUser } from "@/lib/actions/patient.actions";
 import Image from "next/image";
 
 export default async function NewAppointment({ params: { userId } }: SearchParamProps) {
     const patient = await getPatient(userId)
+    
     return (
 
         <div className="flex h-screen max-h-screen">
@@ -20,6 +21,7 @@ export default async function NewAppointment({ params: { userId } }: SearchParam
                         type="create"
                         userId={userId}
                         patientId={patient.$id}
+
                     />
 
                     <p className="copyright mt-10 py-12">

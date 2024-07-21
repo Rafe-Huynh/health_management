@@ -22,6 +22,7 @@ import { SelectItem } from "../ui/select"
 import Image from "next/image"
 import FileUploader from "../FileUploader"
 
+
 const RegisterForm = ({ user }: { user: User }) => {
 
   const router = useRouter()
@@ -85,6 +86,7 @@ const RegisterForm = ({ user }: { user: User }) => {
   }
 
   return (
+    
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12 flex-1">
         <section className="space-y-4">

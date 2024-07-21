@@ -66,12 +66,14 @@ export const createUser = async (user: CreateUserParams) => {
       const patients = await databases.listDocuments(
         DATABASE_ID!,
         PATIENT_COLLECTION_ID!,
-        [
-          Query.equal('userId', userId) // get the query of the user Id match with the userId that looking for 
-        ]
-      )
-      return parseStringify(patients.documents[0])
+        [Query.equal("userId", [userId])]
+      );
+  
+      return parseStringify(patients.documents[0]);
     } catch (error) {
-      console.log(error)
+      console.error(
+        "An error occurred while retrieving the patient details:",
+        error
+      );
     }
-  }
+  };
