@@ -1,11 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-
+import * as Sentry from '@sentry/nextjs'
 import { getUser } from '@/lib/actions/patient.actions'
 import RegisterForm from '@/components/forms/RegisterForm'
 const Register = async ({params: {userId}}:SearchParamProps) => {
     const user = await getUser(userId)
+    Sentry.metrics.set('user_view', user.name) // track user view the page
+    
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container ">
