@@ -26,6 +26,7 @@ export const getAppointment = async (appointmentId: string) => {
             appointmentId,
 
         )
+        console.log(appointment)
         return parseStringify(appointment)
     } catch (error) {
      console.log(error)   
@@ -36,9 +37,9 @@ export const getRecentAppointmentList = async () => {
         const appointments = await databases.listDocuments(
             DATABASE_ID!,
             APPOINTMENT_COLLECTION_ID!,
-            [Query.orderDesc('$createdAt')]
-
-        )
+           
+          );
+          console.log("Fetched Appointments:", appointments);
         const initialCounts = {
             scheduledCount: 0,
             pendingCount: 0,

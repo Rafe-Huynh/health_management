@@ -9,7 +9,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from './ui/button'
-import AppointmentForm from './forms/AppointmentForm'
+import {AppointmentForm} from './forms/AppointmentForm'
 import { Appointment } from '@/types/appwrite.types'
 
 const AppointmentModal = ({type, patientId, userId, appointment}: {type: 'schedule' | 'cancel', patientId:string, userId:string, appointment?: Appointment, }) => {
