@@ -29,7 +29,7 @@ const Success = async ({ params: { userId }, searchParams }: SearchParamProps) =
                         </span>
                         has been successfully submit
                     </h2>
-                    <p>We'll be in touch shortly</p>
+                    <p>We will be in touch shortly</p>
                 </section>
                 <section className='request-details'>
                     <p>Resquested appointment details: </p>
