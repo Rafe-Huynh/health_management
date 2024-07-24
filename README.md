@@ -1,4 +1,6 @@
 
+🔑 To access the admin page, the passcode is 111111
+
 ⚙️ Tech Stack</br>
 Next.js </br>
 Appwrite </br>
@@ -7,7 +9,8 @@ TailwindCSS </br>
 ShadCN </br>
 Twilio
 
-🔋 Features
+🔋 Features </br>
+
 👉 Register as a Patient: Users can sign up and create a personal profile as a patient.
 
 👉 Book a New Appointment with Doctor: Patients can schedule appointments with doctors at their convenience and can book multiple appointments.
