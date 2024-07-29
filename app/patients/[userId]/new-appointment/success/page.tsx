@@ -45,7 +45,7 @@ const Success = async ({ params: { userId }, searchParams }: SearchParamProps) =
                     </div>
                     <div className='flex gap-2'>
                         <Image
-                            src="assets/icons/calendar.svg"
+                            src="/assets/icons/calendar.svg"
                             height={24}
                             width={24}
                             alt="calendar"
