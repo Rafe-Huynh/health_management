@@ -1,15 +1,41 @@
+'use client'
 import {DataTable} from '@/components/table/DataTable'
 import StatCard from '@/components/StatCard'
 import { getRecentAppointmentList } from '@/lib/actions/appointment.actions'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { columns } from '@/components/table/columns'
+import SearchBar from '@/components/SearchBar'
+import { Appointment } from '@/types/appwrite.types'
 
 
-const Admin = async () => {
-   
-    const appointments = await getRecentAppointmentList()
+const Admin = () => {
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
+    const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>([]);
+    const [counts, setCounts] = useState({
+        scheduledCount: 0,
+        pendingCount: 0,
+        cancelledCount: 0,
+      });
+    useEffect(() => {
+      const fetchAppointments = async () => {
+        const result = await getRecentAppointmentList();
+        setAppointments(result.documents);
+        setFilteredAppointments(result.documents);
+        setCounts({
+            scheduledCount: result.scheduledCount,
+            pendingCount: result.pendingCount,
+            cancelledCount: result.cancelledCount,
+          });
+      };
+      fetchAppointments();
+    }, []);
+  
+    const handleSearch = (searchResults: Appointment[]) => {
+      setFilteredAppointments(searchResults);
+    };
+    
   return (
     <div className='mx-auto flex max-w-7xl flex-col space-y-14'>
         <header  className='admin-header'>
@@ -30,24 +56,25 @@ const Admin = async () => {
             </section>
             <section className='admin-stat'>
                 <StatCard type="appointments"
-                count={appointments.scheduledCount}
+                count={counts.scheduledCount}
                 label ="Scheduled appointments"
                 icon = "/assets/icons/appointments.svg"
                 />
                
                 <StatCard type="pending"
-                count={appointments.pendingCount}
+                count={counts.pendingCount}
                 label ="Pending appointments"
                 icon = "/assets/icons/pending.svg"
                 />
 
                 <StatCard type="cancelled"
-                count={appointments.cancelledCount}
+                count={counts.cancelledCount}
                 label ="Cancelled appointments"
                 icon = "/assets/icons/cancelled.svg"
                 />
             </section>
-            <DataTable columns={columns} data={appointments.documents}/>
+            <SearchBar appointments={appointments} onSearch={handleSearch}/>
+            <DataTable columns={columns} data={filteredAppointments}/>
         </main>
     </div>
   )
