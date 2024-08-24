@@ -10,6 +10,7 @@ import { Appointment } from "@/types/appwrite.types";
 
 import { StatusBadge } from "../StatusBadge";
 import AppointmentModal from "../AppointmentModal";
+import DeleteModal from "../DeleteModal";
 
 export const columns: ColumnDef<Appointment>[] = [
   {
@@ -95,6 +96,9 @@ export const columns: ColumnDef<Appointment>[] = [
             appointment={appointment}
             type="cancel"
             
+          />
+          <DeleteModal 
+          documentId = {appointment.$id}
           />
         </div>
       );

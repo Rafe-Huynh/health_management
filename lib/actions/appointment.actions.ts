@@ -5,6 +5,7 @@ import { parseStringify } from "../utils"
 import { Appointment } from "@/types/appwrite.types";
 import { revalidatePath } from "next/cache";
 import { formatDateTime } from "../utils";
+import { redirect } from 'next/navigation'
 export const createAppointment = async (appointment: CreateAppointmentParams) =>{
     try {
         const newPatient = await databases.createDocument(
@@ -100,4 +101,12 @@ export const sendSMSNotification = async (userId: string, content: string)  => {
     }
 }
 
-
+export const deleteAppointment = async (documentId:string) => {
+    try {
+        await databases.deleteDocument(DATABASE_ID!, APPOINTMENT_COLLECTION_ID!, documentId)
+        revalidatePath('/admin')
+        redirect('/admin')
+    } catch (error) {
+        console.log(`Error while deleting an Appointment ${error}`)
+    }
+}
